@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-require('dotenv').config();
+require("dotenv").config();
 const port = process.env.PORT || 5000;
 const app = express();
 
@@ -8,8 +8,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
-const uri = `mongodb+srv://${process.env.MONGO_DB_USERNAME}:${process.env.MONGO_DB_USERPASSWORD}@neuro.fjskv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
+const uri = `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASSWORD}@neuro.fjskv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -19,13 +19,25 @@ const client = new MongoClient(uri, {
 async function run(){
     try{
         await client.connect();
-        const collection = client.db("NeruInstruments").collection("instruments");
-
+        const instrumentsCollection = client.db("NeruInstruments").collection("instruments");
+        app.get('/instruments', async(req,res)=>{
+            const query = {};
+            const cursor = instrumentsCollection.find(query);
+            const instruments = await cursor.toArray();
+            res.send(instruments);
+        })
+        app.get('/instruments/:id', async(req,res)=>{
+            const id = req.params.id;
+            const query = {_id: ObjectId(id)};
+            const instrument = await instrumentsCollection.findOne(query);;
+            res.send(instrument);
+        })
     } finally{
 
-
+        // client.close();
     }
 }
+run().catch(console.dir);
 
 app.get('/',(req,res)=>{
     res.send("Happy Coding")
