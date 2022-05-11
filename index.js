@@ -26,12 +26,19 @@ async function run(){
             const instruments = await cursor.toArray();
             res.send(instruments);
         })
-        app.get('/instruments/:id', async(req,res)=>{
+        app.get('/instrument/:id', async(req,res)=>{
             const id = req.params.id;
             const query = {_id: ObjectId(id)};
             const instrument = await instrumentsCollection.findOne(query);;
             res.send(instrument);
         })
+        app.delete("/instrument/:id", async (req, res) => {
+          const id = req.params.id;
+          const query = { _id: ObjectId(id) };
+          const instrument = await instrumentsCollection.deleteOne(query);
+          res.send(instrument);
+        });
+
     } finally{
 
         // client.close();
