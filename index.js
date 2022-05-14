@@ -9,17 +9,18 @@ app.use(cors());
 app.use(express.json());
 
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
-const uri = `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASSWORD}@neuro.fjskv.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_NAME}:${process.env.DB_PASSWORD}@cluster0.2m4qi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   serverApi: ServerApiVersion.v1,
 });
 
+
 async function run(){
     try{
         await client.connect();
-        const instrumentsCollection = client.db("NeruInstruments").collection("instruments");
+        const instrumentsCollection = client.db("NeuroInstruments").collection("instruments");
         app.get('/instruments', async(req,res)=>{
             const query = {};
             const cursor = instrumentsCollection.find(query);
