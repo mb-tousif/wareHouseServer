@@ -31,7 +31,28 @@ async function run(){
             const query = {_id: ObjectId(id)};
             const instrument = await instrumentsCollection.findOne(query);;
             res.send(instrument);
+        });
+        // POST:
+        app.post('/instruments', async (req, res)=>{
+            const newInstrument = req.body;
+            const result = await instrumentsCollection.insertOne(newInstrument);
+            res.send(result);
         })
+        //    app.put("/instrument/:id", async (req, res) => {
+        //     const id = req.params.id;
+        //     const updatedStock = req.body;
+        //     const filter = { _id: ObjectId(id) };
+        //     const options = { upsert: true };
+
+        //     const updateDoc = {
+        //         $set: {
+        //             quantity: updatedStock.quantity,
+        //         },
+        //     };
+        //     const instrument = await productCollection.updateOne(filter, updateDoc, options);
+        //     res.send(instrument);
+        // });
+
         app.delete("/instrument/:id", async (req, res) => {
           const id = req.params.id;
           const query = { _id: ObjectId(id) };
@@ -41,7 +62,7 @@ async function run(){
 
     } finally{
 
-        // client.close();
+    //    await client.close();
     }
 }
 run().catch(console.dir);
