@@ -38,20 +38,19 @@ async function run(){
             const result = await instrumentsCollection.insertOne(newInstrument);
             res.send(result);
         })
-        //    app.put("/instrument/:id", async (req, res) => {
-        //     const id = req.params.id;
-        //     const updatedStock = req.body;
-        //     const filter = { _id: ObjectId(id) };
-        //     const options = { upsert: true };
-
-        //     const updateDoc = {
-        //         $set: {
-        //             quantity: updatedStock.quantity,
-        //         },
-        //     };
-        //     const instrument = await productCollection.updateOne(filter, updateDoc, options);
-        //     res.send(instrument);
-        // });
+        app.put("/instrument/:id", async (req, res) => {
+        const id = req.params.id;
+        const updatedStock = req.body;
+        const filter = { _id: ObjectId(id) };
+        const options = { upsert: true };
+        const updateDoc = {
+            $set: {
+                quantity: updatedStock.quantity,
+            },
+        };
+        const instrument = await instrumentsCollection.updateOne(filter, updateDoc, options);
+        res.send(instrument);
+        });
 
         app.delete("/instrument/:id", async (req, res) => {
           const id = req.params.id;
